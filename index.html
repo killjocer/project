@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Хотамов Мухаммад | 9В | Космический дизайн</title>
+    <title>Хотамов Мухаммад | 9В | КОСМОС</title>
     <style>
         * {
             margin: 0;
@@ -22,18 +22,23 @@
             --text-secondary: rgba(255, 255, 255, 0.7);
             --glass-bg: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.05);
-            --shadow-color: rgba(0, 0, 0, 0.5);
-            --neon-glow: 0 0 20px rgba(121, 40, 202, 0.5);
         }
 
-        @keyframes move {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(20px, 20px); }
+        /* Анимации */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.1); }
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: drop-shadow(0 0 20px var(--primary)); }
+            33% { filter: drop-shadow(0 0 40px var(--secondary)); }
+            66% { filter: drop-shadow(0 0 40px var(--accent-1)); }
         }
 
         @keyframes rotate {
@@ -41,14 +46,12 @@
             to { transform: rotate(360deg); }
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 30px rgba(121, 40, 202, 0.3); }
-            50% { box-shadow: 0 0 50px rgba(255, 0, 128, 0.5); }
+        @keyframes rotate3d {
+            0% { transform: rotateX(0deg) rotateY(0deg); }
+            25% { transform: rotateX(10deg) rotateY(20deg); }
+            50% { transform: rotateX(20deg) rotateY(10deg); }
+            75% { transform: rotateX(-10deg) rotateY(-20deg); }
+            100% { transform: rotateX(0deg) rotateY(0deg); }
         }
 
         @keyframes gradientShift {
@@ -57,14 +60,19 @@
             100% { background-position: 0% 50%; }
         }
 
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+        @keyframes particleMove {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(100px, 100px) rotate(360deg); }
         }
 
-        @keyframes particleMove {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(100px, 100px); }
+        @keyframes wave {
+            0%, 100% { clip-path: polygon(0% 45%, 15% 44%, 32% 50%, 54% 60%, 70% 61%, 84% 59%, 100% 52%, 100% 100%, 0% 100%); }
+            50% { clip-path: polygon(0% 60%, 16% 65%, 34% 66%, 51% 62%, 67% 50%, 84% 45%, 100% 46%, 100% 100%, 0% 100%); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         body {
@@ -77,6 +85,7 @@
             overflow-x: hidden;
         }
 
+        /* Фоновые эффекты */
         body::before {
             content: '';
             position: fixed;
@@ -84,11 +93,29 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 20% 30%, rgba(121, 40, 202, 0.15) 0%, transparent 30%),
-                        radial-gradient(circle at 80% 70%, rgba(255, 0, 128, 0.15) 0%, transparent 30%);
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(121, 40, 202, 0.2) 0%, transparent 30%),
+                radial-gradient(circle at 80% 70%, rgba(255, 0, 128, 0.2) 0%, transparent 30%),
+                radial-gradient(circle at 40% 80%, rgba(0, 223, 216, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 70% 20%, rgba(0, 124, 240, 0.15) 0%, transparent 40%);
             pointer-events: none;
             z-index: 0;
             animation: pulse 8s infinite;
+        }
+
+        /* Шум */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="1" stitchTiles="stitch"/><feColorMatrix type="matrix" values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0.05 0"/></filter><rect width="100" height="100" filter="url(%23noise)" opacity="0.1"/></svg>');
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 1;
+            mix-blend-mode: overlay;
         }
 
         .container {
@@ -96,24 +123,25 @@
             margin: 0 auto;
             padding: 0 24px;
             position: relative;
-            z-index: 2;
+            z-index: 10;
         }
 
         html {
             scroll-behavior: smooth;
         }
 
-        /* Прогресс-бар при скролле */
+        /* Прогресс-бар с эффектами */
         .progress-bar {
             position: fixed;
             top: 0;
             left: 0;
             width: 0%;
             height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent-1));
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent-1), var(--accent-2));
             z-index: 1001;
             transition: width 0.1s;
-            box-shadow: 0 0 20px var(--primary);
+            box-shadow: 0 0 30px var(--primary), 0 0 60px var(--secondary);
+            animation: glow 2s infinite;
         }
 
         /* Шапка */
@@ -122,7 +150,7 @@
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(3, 0, 20, 0.6);
+            background: rgba(3, 0, 20, 0.7);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--glass-border);
@@ -137,15 +165,17 @@
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 2rem;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent-1));
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent-1), var(--accent-2));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            background-size: 200% 200%;
+            background-size: 300% 300%;
             animation: gradientShift 5s ease infinite;
             position: relative;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .logo::after {
@@ -154,9 +184,10 @@
             width: 100%;
             height: 100%;
             background: inherit;
-            filter: blur(20px);
-            opacity: 0.5;
+            filter: blur(30px);
+            opacity: 0.7;
             z-index: -1;
+            animation: pulse 3s infinite;
         }
 
         .nav-links {
@@ -167,11 +198,12 @@
         .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
-            font-weight: 500;
-            font-size: 1.05rem;
+            font-weight: 600;
+            font-size: 1.1rem;
             transition: all 0.3s;
             position: relative;
             padding: 5px 0;
+            letter-spacing: 1px;
         }
 
         .nav-links a::before {
@@ -181,7 +213,7 @@
             left: 0;
             width: 100%;
             height: 2px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent-1));
             transform: scaleX(0);
             transform-origin: right;
             transition: transform 0.3s;
@@ -189,7 +221,8 @@
 
         .nav-links a:hover {
             color: white;
-            text-shadow: 0 0 10px var(--primary);
+            text-shadow: 0 0 20px var(--primary), 0 0 40px var(--secondary);
+            transform: translateY(-2px);
         }
 
         .nav-links a:hover::before {
@@ -218,17 +251,19 @@
         }
 
         .hero-content h1 {
-            font-size: 4.2rem;
-            font-weight: 800;
-            line-height: 1.2;
+            font-size: 5rem;
+            font-weight: 900;
+            line-height: 1.1;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, #fff, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, #fff, var(--primary), var(--secondary), var(--accent-1));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            background-size: 200% 200%;
+            background-size: 300% 300%;
             animation: gradientShift 8s ease infinite;
             position: relative;
+            text-transform: uppercase;
+            letter-spacing: 3px;
         }
 
         .hero-content h1::after {
@@ -239,13 +274,14 @@
             width: 100%;
             height: 100%;
             background: inherit;
-            filter: blur(40px);
-            opacity: 0.3;
+            filter: blur(60px);
+            opacity: 0.4;
             z-index: -1;
+            animation: pulse 3s infinite;
         }
 
         .hero-content .subtitle {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             margin-bottom: 25px;
             display: flex;
             align-items: center;
@@ -255,21 +291,24 @@
 
         .hero-content .class-badge {
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 8px 20px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
+            padding: 8px 25px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
             color: white;
-            box-shadow: 0 0 30px rgba(121, 40, 202, 0.5);
-            animation: pulse 2s infinite;
+            box-shadow: 0 0 40px rgba(121, 40, 202, 0.7);
+            animation: pulse 2s infinite, glow 3s infinite;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .hero-content p {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             color: var(--text-secondary);
             margin-bottom: 40px;
             max-width: 90%;
             line-height: 1.8;
+            text-shadow: 0 0 20px rgba(255,255,255,0.1);
         }
 
         .btn-group {
@@ -278,17 +317,19 @@
         }
 
         .btn {
-            padding: 16px 40px;
-            border-radius: 50px;
+            padding: 18px 45px;
+            border-radius: 60px;
             text-decoration: none;
-            font-weight: 600;
-            font-size: 1.1rem;
+            font-weight: 700;
+            font-size: 1.2rem;
             transition: all 0.3s;
             border: none;
             cursor: pointer;
             position: relative;
             overflow: hidden;
             z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .btn::before {
@@ -298,9 +339,11 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent-1));
             z-index: -1;
             transition: transform 0.5s;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease infinite;
         }
 
         .btn::after {
@@ -310,29 +353,25 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            background: linear-gradient(135deg, var(--secondary), var(--primary), var(--accent-2));
             z-index: -1;
             opacity: 0;
             transition: opacity 0.5s;
+            background-size: 200% 200%;
         }
 
         .btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 20px 40px -10px var(--primary);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 30px 50px -20px var(--primary);
         }
 
         .btn:hover::after {
             opacity: 1;
         }
 
-        .btn-primary {
-            color: white;
-        }
-
         .btn-outline {
             background: transparent;
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .btn-outline::before, .btn-outline::after {
@@ -341,99 +380,93 @@
 
         .btn-outline:hover {
             border-color: var(--primary);
-            background: rgba(121, 40, 202, 0.1);
-            box-shadow: 0 0 30px var(--primary);
+            background: rgba(121, 40, 202, 0.2);
+            box-shadow: 0 0 50px var(--primary);
+            backdrop-filter: blur(10px);
         }
 
-        /* Фото с эффектами */
+        /* 3D блок вместо фото */
         .hero-image {
             position: relative;
             display: flex;
             justify-content: center;
             align-items: center;
+            perspective: 2000px;
         }
 
-        .photo-frame {
+        .cube-container {
             width: 400px;
             height: 500px;
-            border-radius: 40px;
-            overflow: hidden;
             position: relative;
-            border: 3px solid transparent;
-            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent-1)) border-box;
-            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: destination-out;
-            mask-composite: exclude;
-            animation: glow 3s infinite;
             transform-style: preserve-3d;
-            transition: transform 0.3s;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            animation: rotate3d 20s infinite ease-in-out;
         }
 
-        .photo-frame:hover {
-            transform: perspective(1000px) rotateY(10deg) rotateX(5deg) scale(1.02);
-        }
-
-        .photo-frame img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.5s;
-        }
-
-        .photo-frame:hover img {
-            transform: scale(1.1);
-        }
-
-        .photo-glow {
+        .cube-face {
             position: absolute;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 50% 50%, var(--primary) 0%, transparent 70%);
-            opacity: 0.4;
-            filter: blur(50px);
-            z-index: -1;
-            animation: pulse 4s infinite;
+            background: linear-gradient(135deg, rgba(121, 40, 202, 0.2), rgba(255, 0, 128, 0.2));
+            border: 3px solid transparent;
+            border-radius: 40px;
+            background-clip: padding-box;
+            backdrop-filter: blur(20px);
+            box-shadow: 
+                0 30px 50px rgba(0,0,0,0.5),
+                0 0 0 2px var(--primary),
+                0 0 0 5px rgba(255,0,128,0.3),
+                0 0 0 8px rgba(0,223,216,0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+            backface-visibility: visible;
+            animation: glow 4s infinite;
         }
 
-        .floating-elements {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+        .cube-face h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 3px;
         }
 
-        .floating-elements span {
-            position: absolute;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            filter: blur(5px);
-            animation: float 3s infinite;
+        .cube-face p {
+            font-size: 1.2rem;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 15px;
         }
 
-        .floating-elements span:nth-child(1) {
-            width: 100px;
-            height: 100px;
-            top: -20px;
-            right: -20px;
-            opacity: 0.1;
-            animation-delay: 0s;
+        .cube-face .big-text {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent-1));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s infinite;
         }
 
-        .floating-elements span:nth-child(2) {
-            width: 150px;
-            height: 150px;
-            bottom: -30px;
-            left: -30px;
-            opacity: 0.1;
-            animation-delay: 1s;
+        .cube-face-1 { transform: translateZ(200px); }
+        .cube-face-2 { transform: rotateY(180deg) translateZ(200px); }
+        .cube-face-3 { transform: rotateY(90deg) translateZ(200px); }
+        .cube-face-4 { transform: rotateY(-90deg) translateZ(200px); }
+        .cube-face-5 { transform: rotateX(90deg) translateZ(200px); }
+        .cube-face-6 { transform: rotateX(-90deg) translateZ(200px); }
+
+        .cube-face span {
+            font-size: 6rem;
+            animation: float 3s infinite, glow 4s infinite;
         }
 
         /* Секции */
         .section {
-            padding: 120px 0;
+            padding: 140px 0;
             position: relative;
         }
 
@@ -442,22 +475,27 @@
         }
 
         .section-title {
-            font-size: 3.2rem;
-            font-weight: 700;
+            font-size: 4rem;
+            font-weight: 800;
             text-align: center;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, #fff, var(--accent-1));
+            background: linear-gradient(135deg, #fff, var(--accent-1), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            background-size: 200% 200%;
+            animation: gradientShift 5s ease infinite;
+            text-transform: uppercase;
+            letter-spacing: 4px;
         }
 
         .section-desc {
             text-align: center;
             color: var(--text-secondary);
             max-width: 700px;
-            margin: 0 auto 60px;
-            font-size: 1.2rem;
+            margin: 0 auto 70px;
+            font-size: 1.3rem;
+            line-height: 1.8;
         }
 
         /* Карточки с 3D эффектом */
@@ -468,57 +506,63 @@
         }
 
         .card-3d {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 50px 30px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 40px;
+            padding: 60px 30px;
             text-align: center;
-            transition: all 0.3s;
+            transition: all 0.4s;
             position: relative;
             overflow: hidden;
             transform-style: preserve-3d;
+            perspective: 2000px;
         }
 
         .card-3d::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.1));
-            transform: translateX(-100%);
-            transition: transform 0.5s;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(135deg, 
+                transparent, 
+                rgba(255,255,255,0.05), 
+                transparent, 
+                rgba(255,255,255,0.05));
+            transform: rotate(45deg);
+            animation: shimmer 8s infinite;
         }
 
         .card-3d:hover {
-            transform: perspective(1000px) rotateX(5deg) translateY(-10px);
+            transform: perspective(2000px) rotateX(10deg) rotateY(5deg) translateY(-20px) scale(1.05);
             border-color: var(--primary);
-            box-shadow: 0 30px 50px -20px var(--primary);
-        }
-
-        .card-3d:hover::before {
-            transform: translateX(100%);
+            box-shadow: 
+                0 40px 70px -20px var(--primary),
+                0 0 0 2px rgba(121,40,202,0.3),
+                0 0 0 4px rgba(255,0,128,0.2);
         }
 
         .card-icon {
-            font-size: 3.5rem;
-            margin-bottom: 25px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: float 3s infinite;
+            font-size: 5rem;
+            margin-bottom: 30px;
+            animation: float 4s infinite, glow 3s infinite;
+            transform-origin: center;
         }
 
         .card-3d h3 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
             background: linear-gradient(135deg, #fff, var(--accent-1));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+        }
+
+        .card-3d p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
         }
 
         /* Галерея с эффектами */
@@ -529,11 +573,11 @@
         }
 
         .gallery-item {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 25px;
-            padding: 80px 30px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 35px;
+            padding: 100px 30px;
             text-align: center;
             transition: all 0.5s;
             position: relative;
@@ -541,38 +585,38 @@
             cursor: pointer;
         }
 
-        .gallery-item::after {
+        .gallery-item::before {
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
+            left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(135deg, var(--primary), transparent);
-            opacity: 0;
-            transition: opacity 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
         }
 
         .gallery-item:hover {
-            transform: scale(1.05) rotate(1deg);
+            transform: scale(1.05) rotate(2deg);
             border-color: var(--secondary);
+            box-shadow: 0 0 70px var(--secondary);
         }
 
-        .gallery-item:hover::after {
-            opacity: 0.2;
+        .gallery-item:hover::before {
+            left: 100%;
         }
 
         .gallery-item h3 {
-            font-size: 1.6rem;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff, var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .gallery-item p {
             color: var(--text-secondary);
-            position: relative;
-            z-index: 1;
+            font-size: 1.2rem;
         }
 
         /* Контакты */
@@ -583,50 +627,54 @@
         }
 
         .contact-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 30px;
-            padding: 50px 20px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 40px;
+            padding: 60px 20px;
             text-align: center;
-            transition: all 0.3s;
+            transition: all 0.4s;
             position: relative;
             overflow: hidden;
         }
 
         .contact-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-20px) scale(1.03);
             border-color: var(--primary);
-            box-shadow: 0 0 50px var(--primary);
+            box-shadow: 0 0 80px var(--primary);
         }
 
         .contact-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            animation: float 3s infinite;
+            font-size: 4rem;
+            margin-bottom: 25px;
+            animation: float 3s infinite, glow 4s infinite;
         }
 
         .contact-card h3 {
-            font-size: 1.4rem;
+            font-size: 2rem;
             margin-bottom: 15px;
             color: var(--accent-1);
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .contact-card a, .contact-card p {
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 1.2rem;
-            transition: color 0.3s;
+            font-size: 1.3rem;
+            transition: all 0.3s;
+            word-break: break-all;
         }
 
         .contact-card a:hover {
             color: var(--primary);
+            text-shadow: 0 0 30px var(--primary);
         }
 
         /* Подвал */
         footer {
-            padding: 80px 0 30px;
-            border-top: 1px solid var(--glass-border);
+            padding: 100px 0 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             position: relative;
             overflow: hidden;
         }
@@ -637,57 +685,63 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 30px;
-            margin-bottom: 60px;
+            margin-bottom: 70px;
         }
 
         .footer-links {
             display: flex;
-            gap: 40px;
+            gap: 50px;
         }
 
         .footer-links a {
             color: var(--text-secondary);
             text-decoration: none;
+            font-size: 1.2rem;
             transition: all 0.3s;
             position: relative;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .footer-links a:hover {
             color: white;
-            text-shadow: 0 0 10px var(--primary);
+            text-shadow: 0 0 30px var(--primary);
+            transform: translateY(-3px);
         }
 
         .social-links {
             display: flex;
-            gap: 25px;
+            gap: 30px;
         }
 
         .social-link {
             color: var(--text-secondary);
             text-decoration: none;
-            font-size: 1.8rem;
-            transition: all 0.3s;
+            font-size: 2.5rem;
+            transition: all 0.4s;
         }
 
         .social-link:hover {
             color: var(--primary);
-            transform: translateY(-5px) scale(1.2);
-            filter: drop-shadow(0 0 20px var(--primary));
+            transform: translateY(-10px) scale(1.3);
+            filter: drop-shadow(0 0 30px var(--primary));
+            animation: rotate 0.5s ease;
         }
 
         .copyright {
             text-align: center;
             color: var(--text-secondary);
-            opacity: 0.7;
-            padding-top: 30px;
-            border-top: 1px solid var(--glass-border);
+            opacity: 0.5;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 1.1rem;
         }
 
         /* Анимация появления при скролле */
         .fade-up {
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .fade-up.appear {
@@ -700,6 +754,7 @@
             .hero .container {
                 grid-template-columns: 1fr;
                 text-align: center;
+                gap: 40px;
             }
 
             .hero-content p {
@@ -721,7 +776,7 @@
             }
 
             .hero-content h1 {
-                font-size: 3rem;
+                font-size: 3.5rem;
             }
 
             .grid-3d, .gallery-grid, .contacts-grid {
@@ -733,7 +788,7 @@
                 text-align: center;
             }
 
-            .photo-frame {
+            .cube-container {
                 width: 300px;
                 height: 400px;
             }
@@ -741,9 +796,9 @@
 
         /* Кастомный курсор */
         .cursor {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--primary);
+            width: 30px;
+            height: 30px;
+            border: 3px solid var(--primary);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
@@ -753,12 +808,13 @@
             will-change: width, height, transform;
             transform: translate(-50%, -50%);
             mix-blend-mode: difference;
+            box-shadow: 0 0 20px var(--primary);
         }
 
         .cursor-follower {
-            width: 40px;
-            height: 40px;
-            border: 2px solid var(--secondary);
+            width: 60px;
+            height: 60px;
+            border: 3px solid var(--secondary);
             border-radius: 50%;
             position: fixed;
             pointer-events: none;
@@ -767,7 +823,8 @@
             transition-property: width, height, border;
             will-change: width, height, transform;
             transform: translate(-50%, -50%);
-            opacity: 0.5;
+            opacity: 0.3;
+            box-shadow: 0 0 30px var(--secondary);
         }
 
         /* Частицы */
@@ -783,12 +840,26 @@
 
         .particle {
             position: absolute;
-            width: 2px;
-            height: 2px;
+            width: 4px;
+            height: 4px;
             background: white;
             border-radius: 50%;
-            opacity: 0.3;
-            animation: particleMove 10s linear infinite;
+            opacity: 0.2;
+            animation: particleMove 15s linear infinite;
+            box-shadow: 0 0 15px var(--primary), 0 0 30px var(--secondary);
+        }
+
+        /* Волны */
+        .wave {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0.1;
+            animation: wave 8s ease-in-out infinite;
+            pointer-events: none;
         }
     </style>
 </head>
@@ -799,6 +870,9 @@
     
     <!-- Частицы -->
     <div class="particles" id="particles"></div>
+    
+    <!-- Волны -->
+    <div class="wave"></div>
 
     <header>
         <div class="container">
@@ -819,23 +893,46 @@
                     <h1>Хотамов Мухаммад</h1>
                     <div class="subtitle">
                         <span>Ученик 9В класса</span>
-                        <span class="class-badge">✨ Индивидуальный проект ✨</span>
+                        <span class="class-badge">✨ ИНДИВИДУАЛЬНЫЙ ПРОЕКТ ✨</span>
                     </div>
-                    <p>Создаю современные веб-сайты с использованием передовых технологий и эффектов. Этот сайт — моя работа для защиты проекта с уникальным дизайном.</p>
+                    <p>Создаю современные веб-сайты с использованием передовых технологий и космических эффектов. Этот сайт — моя работа для защиты проекта с уникальным дизайном.</p>
                     <div class="btn-group">
-                        <a href="#gallery" class="btn btn-primary">🚀 Мои работы</a>
-                        <a href="#contacts" class="btn btn-outline">✨ Связаться</a>
+                        <a href="#gallery" class="btn btn-primary">🚀 МОИ РАБОТЫ</a>
+                        <a href="#contacts" class="btn btn-outline">✨ СВЯЗАТЬСЯ</a>
                     </div>
                 </div>
                 <div class="hero-image fade-up">
-                    <div class="photo-glow"></div>
-                    <div class="photo-frame">
-                        <!-- ПРАВИЛЬНАЯ ССЫЛКА НА ФОТО С GITHUB (RAW) -->
-                        <img src="https://github.com/killjocer/project/raw/main/images/IMG_20260308_153456.jpg" alt="Хотамов Мухаммад">
-                    </div>
-                    <div class="floating-elements">
-                        <span></span>
-                        <span></span>
+                    <!-- Вместо фото - крутой 3D куб -->
+                    <div class="cube-container">
+                        <div class="cube-face cube-face-1">
+                            <span>✨</span>
+                            <h2>9В</h2>
+                            <p>Класс</p>
+                        </div>
+                        <div class="cube-face cube-face-2">
+                            <span>🚀</span>
+                            <h2>HTML</h2>
+                            <p>CSS</p>
+                        </div>
+                        <div class="cube-face cube-face-3">
+                            <span>💻</span>
+                            <h2>Код</h2>
+                            <p>Сайт</p>
+                        </div>
+                        <div class="cube-face cube-face-4">
+                            <span>⚡</span>
+                            <h2>Эффекты</h2>
+                            <p>3D</p>
+                        </div>
+                        <div class="cube-face cube-face-5">
+                            <span>🎯</span>
+                            <h2>Проект</h2>
+                            <p>2026</p>
+                        </div>
+                        <div class="cube-face cube-face-6">
+                            <div class="big-text">9</div>
+                            <div class="big-text">В</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -843,7 +940,7 @@
 
         <section id="about" class="section">
             <div class="container">
-                <h2 class="section-title fade-up">Обо <span>мне</span></h2>
+                <h2 class="section-title fade-up">ОБО <span>МНЕ</span></h2>
                 <p class="section-desc fade-up">Моя история и навыки в веб-разработке</p>
                 <div class="grid-3d">
                     <div class="card-3d fade-up">
@@ -854,7 +951,7 @@
                     <div class="card-3d fade-up">
                         <div class="card-icon">💻</div>
                         <h3>Навыки</h3>
-                        <p>HTML5, CSS3, адаптивная верстка, Flexbox, Grid, анимации, 3D-эффекты</p>
+                        <p>HTML5, CSS3, адаптивная верстка, Flexbox, Grid, анимации, 3D-эффекты, параллакс</p>
                     </div>
                     <div class="card-3d fade-up">
                         <div class="card-icon">🚀</div>
@@ -867,7 +964,7 @@
 
         <section id="gallery" class="section">
             <div class="container">
-                <h2 class="section-title fade-up">Мои <span>проекты</span></h2>
+                <h2 class="section-title fade-up">МОИ <span>ПРОЕКТЫ</span></h2>
                 <p class="section-desc fade-up">Работы, созданные в процессе обучения</p>
                 <div class="gallery-grid">
                     <div class="gallery-item fade-up">
@@ -888,7 +985,7 @@
 
         <section id="contacts" class="section">
             <div class="container">
-                <h2 class="section-title fade-up">Мои <span>контакты</span></h2>
+                <h2 class="section-title fade-up">МОИ <span>КОНТАКТЫ</span></h2>
                 <p class="section-desc fade-up">Свяжитесь со мной любым способом</p>
                 <div class="contacts-grid">
                     <div class="contact-card fade-up">
@@ -924,7 +1021,7 @@
                 <div class="social-links">
                     <a href="mailto:Mhotamov980@gmail.com" class="social-link">✉️</a>
                     <a href="tel:+79120836968" class="social-link">📞</a>
-                    <a href="#" class="social-link">📱</a>
+                    <a href="#" class="social-link">⚡</a>
                 </div>
             </div>
             <div class="copyright">
@@ -976,7 +1073,7 @@
 
         document.addEventListener('mouseenter', () => {
             cursor.style.opacity = 1;
-            cursorFollower.style.opacity = 0.5;
+            cursorFollower.style.opacity = 0.3;
         });
 
         document.addEventListener('mouseleave', () => {
@@ -988,40 +1085,50 @@
         const links = document.querySelectorAll('a, button');
         links.forEach(link => {
             link.addEventListener('mouseenter', () => {
-                cursor.style.width = '40px';
-                cursor.style.height = '40px';
+                cursor.style.width = '50px';
+                cursor.style.height = '50px';
                 cursor.style.borderColor = 'var(--secondary)';
-                cursorFollower.style.width = '60px';
-                cursorFollower.style.height = '60px';
+                cursor.style.boxShadow = '0 0 30px var(--secondary)';
+                cursorFollower.style.width = '80px';
+                cursorFollower.style.height = '80px';
+                cursorFollower.style.borderColor = 'var(--primary)';
             });
             
             link.addEventListener('mouseleave', () => {
-                cursor.style.width = '20px';
-                cursor.style.height = '20px';
+                cursor.style.width = '30px';
+                cursor.style.height = '30px';
                 cursor.style.borderColor = 'var(--primary)';
-                cursorFollower.style.width = '40px';
-                cursorFollower.style.height = '40px';
+                cursor.style.boxShadow = '0 0 20px var(--primary)';
+                cursorFollower.style.width = '60px';
+                cursorFollower.style.height = '60px';
+                cursorFollower.style.borderColor = 'var(--secondary)';
             });
         });
 
         // Создание частиц
         const particlesContainer = document.getElementById('particles');
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 100; i++) {
             const particle = document.createElement('div');
             particle.className = 'particle';
             particle.style.left = Math.random() * 100 + '%';
             particle.style.top = Math.random() * 100 + '%';
             particle.style.animationDelay = Math.random() * 5 + 's';
-            particle.style.animationDuration = 10 + Math.random() * 10 + 's';
+            particle.style.animationDuration = 15 + Math.random() * 15 + 's';
+            particle.style.background = `hsl(${Math.random() * 360}, 100%, 70%)`;
             particlesContainer.appendChild(particle);
         }
 
         // Параллакс эффект
         document.addEventListener('mousemove', (e) => {
-            const mouseX = e.clientX / window.innerWidth;
-            const mouseY = e.clientY / window.innerHeight;
+            const mouseX = e.clientX / window.innerWidth - 0.5;
+            const mouseY = e.clientY / window.innerHeight - 0.5;
             
-            document.body.style.background = `linear-gradient(135deg, var(--bg-dark) 0%, #1a0b2e 50%, var(--bg-light) 100%)`;
+            document.body.style.backgroundPosition = `${50 + mouseX * 5}% ${50 + mouseY * 5}%`;
+            
+            const cubes = document.querySelectorAll('.cube-container');
+            cubes.forEach(cube => {
+                cube.style.transform = `rotateX(${mouseY * 30}deg) rotateY(${mouseX * 30}deg)`;
+            });
         });
     </script>
 </body>
