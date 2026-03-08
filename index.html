@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хотамов Мухаммад | 9В класс</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-dark: #0a0c1a;
+            --primary-soft: #1a1e32;
+            --accent: #6c5ce7;
+            --accent-light: #8b7cf0;
+            --text-light: #f0f0f5;
+            --text-soft: #cbd5e1;
+            --bg-gradient: linear-gradient(145deg, #0f1225 0%, #1b1f3a 100%);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --transition: all 0.4s ease;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-light);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 28px;
+        }
+
+        /* Стеклянная навигация */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 12, 26, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            z-index: 1000;
+            padding: 18px 0;
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.7rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+
+        .nav-links a {
+            color: var(--text-soft);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.05rem;
+            transition: var(--transition);
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: var(--transition);
+            border-radius: 2px;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Главный экран с фото */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 100px 0 60px;
+        }
+
+        .hero .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent-light) 80%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.3rem;
+            color: var(--text-soft);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hero-content .class-badge {
+            background: rgba(108, 92, 231, 0.2);
+            border: 1px solid rgba(108, 92, 231, 0.5);
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .hero-content p {
+            font-size: 1.1rem;
+            color: var(--text-soft);
+            margin-bottom: 40px;
+            max-width: 90%;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 14px 36px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+            box-shadow: 0 10px 25px -8px var(--accent);
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-light);
+            transform: translateY(-3px);
+            box-shadow: 0 20px 30px -10px var(--accent);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent);
+            background: rgba(108, 92, 231, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* Стили для фото */
+        .hero-image {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .photo-frame {
+            width: 400px;
+            height: 500px;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            position: relative;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .photo-frame:hover {
+            transform: scale(1.02);
+            border-color: var(--accent);
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, var(--accent) 0%, transparent 70%);
+            opacity: 0.15;
+            filter: blur(40px);
+            z-index: -1;
+        }
+
+        /* Секция "О себе" */
+        .about-section {
+            padding: 100px 0;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(5px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title span {
+            color: var(--accent);
+        }
+
+        .section-desc {
+            text-align: center;
+            color: var(--text-soft);
+            max-width: 700px;
+            margin: 0 auto 60px;
+            font-size: 1.2rem;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .about-card {
+            background: var(--card-bg);
+            border: var(--glass-border);
+            backdrop-filter: blur(10px);
+            padding: 40px 30px;
+            border-radius: 30px;
+            transition: var(--transition);
+            text-align: center;
+        }
+
+        .about-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(108, 92, 231, 0.5);
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: rgba(108, 92, 231, 0.2);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            border: 1px solid rgba(108, 92, 231, 0.3);
+        }
+
+        .about-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .about-card p {
+            color: var(--text-soft);
+        }
+
+        /* Галерея */
+        .gallery-section {
+            padding: 100px 0;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .gallery-item {
+            background: var(--card-bg);
+            border: var(--glass-border);
+            border-radius: 25px;
+            padding: 60px 30px;
+            text-align: center;
+            transition: var(--transition);
+            backdrop-filter: blur(5px);
+        }
+
+        .gallery-item:hover {
+            border-color: var(--accent);
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .gallery-item h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+
+        .gallery-item p {
+            color: var(--text-soft);
+        }
+
+        /* Контакты */
+        .contacts-section {
+            padding: 100px 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .contacts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto 50px;
+        }
+
+        .contact-card {
+            background: var(--card-bg);
+            border: var(--glass-border);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            padding: 40px 20px;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent);
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .contact-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: var(--accent);
+        }
+
+        .contact-card a, .contact-card p {
+            color: var(--text-soft);
+            text-decoration: none;
+            font-size: 1.1rem;
+            word-break: break-all;
+            transition: var(--transition);
+        }
+
+        .contact-card a:hover {
+            color: var(--accent-light);
+        }
+
+        /* Подвал */
+        footer {
+            padding: 50px 0 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .footer-links a {
+            color: var(--text-soft);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-link {
+            color: var(--text-soft);
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            color: var(--text-soft);
+            opacity: 0.7;
+            font-size: 0.95rem;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            .hero .container {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 40px;
+            }
+
+            .hero-content p {
+                max-width: 100%;
+            }
+
+            .btn-group {
+                justify-content: center;
+            }
+
+            .photo-frame {
+                width: 350px;
+                height: 450px;
+                margin: 0 auto;
+            }
+
+            .about-grid, .gallery-grid, .contacts-grid, .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+
+            .about-grid, .gallery-grid, .contacts-grid, .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .photo-frame {
+                width: 300px;
+                height: 400px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+
+            .btn-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">Хотамов М.</div>
+            <nav class="nav-links">
+                <a href="#home">Главная</a>
+                <a href="#about">О себе</a>
+                <a href="#gallery">Проекты</a>
+                <a href="#contacts">Контакты</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Главная с фото -->
+        <section id="home" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Хотамов Мухаммад</h1>
+                    <div class="subtitle">
+                        <span>Ученик 9В класса</span>
+                        <span class="class-badge">Индивидуальный проект</span>
+                    </div>
+                    <p>Создаю современные веб-сайты с помощью HTML и CSS. Этот сайт — моя работа для защиты проекта.</p>
+                    <div class="btn-group">
+                        <a href="#gallery" class="btn btn-primary">Мои работы</a>
+                        <a href="#contacts" class="btn btn-outline">Связаться</a>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <div class="photo-glow"></div>
+                    <div class="photo-frame">
+                        <!-- Ваше фото по ссылке -->
+                        <img src="https://i.ibb.co/rKPBdyxZ/Picsart-26-02-14-18-58-50-789.jpg" alt="Хотамов Мухаммад">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- О себе -->
+        <section id="about" class="about-section">
+            <div class="container">
+                <h2 class="section-title">Обо <span>мне</span></h2>
+                <p class="section-desc">Немного информации о том, кто я и чем занимаюсь</p>
+                <div class="about-grid">
+                    <div class="about-card">
+                        <div class="card-icon">🎯</div>
+                        <h3>Цель</h3>
+                        <p>Защитить индивидуальный проект по теме "Создание веб-сайта" и получить отличную оценку</p>
+                    </div>
+                    <div class="about-card">
+                        <div class="card-icon">💻</div>
+                        <h3>Навыки</h3>
+                        <p>HTML5, CSS3, адаптивная верстка, работа с Flexbox и Grid</p>
+                    </div>
+                    <div class="about-card">
+                        <div class="card-icon">🚀</div>
+                        <h3>Планы</h3>
+                        <p>Изучить JavaScript и создавать интерактивные веб-приложения</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Галерея проектов -->
+        <section id="gallery" class="gallery-section">
+            <div class="container">
+                <h2 class="section-title">Мои <span>проекты</span></h2>
+                <p class="section-desc">Несколько работ, которые я создал в процессе обучения</p>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <h3>Сайт-визитка</h3>
+                        <p>Первый опыт в веб-разработке</p>
+                    </div>
+                    <div class="gallery-item">
+                        <h3>Лендинг</h3>
+                        <p>Одностраничный сайт с современным дизайном</p>
+                    </div>
+                    <div class="gallery-item">
+                        <h3>Этот сайт</h3>
+                        <p>Индивидуальный проект для защиты</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Контакты -->
+        <section id="contacts" class="contacts-section">
+            <div class="container">
+                <h2 class="section-title">Мои <span>контакты</span></h2>
+                <p class="section-desc">Свяжитесь со мной для вопросов по проекту</p>
+                <div class="contacts-grid">
+                    <div class="contact-card">
+                        <div class="contact-icon">📧</div>
+                        <h3>Email</h3>
+                        <a href="mailto:Mhotamov980@gmail.com">Mhotamov980@gmail.com</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">📱</div>
+                        <h3>Телефон</h3>
+                        <a href="tel:+79120836968">+7 (912) 083-69-68</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">🏫</div>
+                        <h3>Класс</h3>
+                        <p>9В класс</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">Хотамов М.</div>
+                <div class="footer-links">
+                    <a href="#home">Главная</a>
+                    <a href="#about">О себе</a>
+                    <a href="#gallery">Проекты</a>
+                    <a href="#contacts">Контакты</a>
+                </div>
+                <div class="social-links">
+                    <a href="mailto:Mhotamov980@gmail.com" class="social-link">✉️</a>
+                    <a href="tel:+79120836968" class="social-link">📞</a>
+                    <a href="#" class="social-link">📱</a>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>© 2026 Хотамов Мухаммад, 9В класс. Индивидуальный проект "Создание веб-сайта"</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
